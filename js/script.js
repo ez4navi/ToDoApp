@@ -3,7 +3,7 @@ const section = document.querySelector("#mainSection"),
   createToDoList = document.createElement('ul'),
   $checkAllMark = $('#mainSection > label'),
   $toggleAll = $('#toggle-all');
-  let toDoListArr = [];
+  let toDoListArr = [], tab;
 
 function clearInput() {
     input.value = '';
@@ -73,6 +73,18 @@ function checkAvailabilityToDo() {
     }
 }
 
+function showActiveToDo() {
+    $('.checkbox.checked')
+      .closest('.list-item')
+      .css('display','none');
+}
+
+function showCompletedToDo() {
+    $('.checkbox').not('.checked')
+      .closest('.list-item')
+      .css('display','none');
+}
+
 function checkFooter() {
     if (toDoListArr.length >= 1) {
         $('#toDoList').append('<footer class="footer">');
@@ -88,16 +100,20 @@ function checkFooter() {
             checkClearCompletedButton();
             checkAvailabilityToDo();
         });
+
         $('.all-todo').click(function () {
             resetAllToDo();
+            setTab('all');
         });
         $('.active-todo').click(function () {
             resetAllToDo();
-            $('.checkbox.checked').closest('.list-item').remove();
+            showActiveToDo();
+            setTab('active');
         });
         $('.completed-todo').click(function () {
             resetAllToDo();
-            $('.checkbox').not('.checked').closest('.list-item').remove();
+            showCompletedToDo();
+            setTab('completed');
         });
         updateToDoCounter();
         checkClearCompletedButton();
@@ -105,6 +121,28 @@ function checkFooter() {
         $('.footer').remove();
     }
 
+}
+
+function setTab(tabLocal) {
+    switch (tabLocal) {
+        case 'active': {
+            $('.active-todo').addClass('selected');
+            localStorage.setItem('tab','active');
+            showActiveToDo();
+        }
+        break;
+        case 'completed': {
+            $('.completed-todo').addClass('selected');
+            localStorage.setItem('tab','completed');
+            showCompletedToDo();
+        }
+        break;
+        default: {
+            $('.all-todo').addClass('selected');
+            localStorage.setItem('tab','all');
+        }
+    }
+    tab = localStorage.getItem('tab');
 }
 
 function checkClearCompletedButton() {
@@ -188,6 +226,7 @@ section.addEventListener('keypress', function (e) {
             updateToDoToLocalStorage();
             checkAllCheckboxes();
             updateFooter();
+            setTab();
         }
 
         updateToDoCounter();
@@ -199,7 +238,11 @@ $(document).ready(function(){
         toDoListArr = JSON.parse(localStorage.getItem('memory'));
         loadFromLocalStorage();
     }
+    if (localStorage.getItem('tab')) {
+        tab = localStorage.getItem('tab');
+    }
     checkFooter();
+    setTab(tab);
 });
 
 $toggleAll.change(function () {

@@ -196,6 +196,10 @@ main input[type=text] {
   cursor: pointer;
 }
 
+.filters li a.selected {
+  border-color: rgba(175, 47, 47, 0.2);
+}
+
 .filters li a:hover {
   border-color: rgba(175, 47, 47, 0.1);
 }
