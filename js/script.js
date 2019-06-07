@@ -74,12 +74,7 @@ function checkFooter() {
             toDoListArr = toDoListArr.filter(item => item.split(':')[1] === 'false');
             updateToDoToLocalStorage();
             checkClearCompletedButton();
-
-
             checkAvailabilityToDo();
-
-
-            
         });
         updateToDoCounter();
         checkClearCompletedButton();
@@ -142,10 +137,7 @@ function insertToDo(item) {
         toDoListArr.splice($(this).closest('li').index(),1);
         $(this).closest('.list-item').remove();
         updateToDoToLocalStorage();
-
-
         checkAvailabilityToDo();
-
         updateFooter();
         updateToDoCounter();
         checkAllCheckboxes();
