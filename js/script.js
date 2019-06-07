@@ -49,8 +49,12 @@ function updateFooter() {
 }
 
 function updateToDoCounter() {
-    $('.todo-counter').text( `${toDoListArr.filter(item => 
-      item.split(":")[1] === 'false').length} items left`);
+    if (toDoListArr.filter(item => item.split(":")[1] === 'false').length === 1) {
+        $('.todo-counter').text( `1 item left`);
+    } else {
+        $('.todo-counter').text(`${toDoListArr.filter(item =>
+          item.split(":")[1] === 'false').length} items left`);
+    }
 }
 
 function checkAvailabilityToDo() {
