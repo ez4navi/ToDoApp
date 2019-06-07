@@ -9,6 +9,14 @@ function clearInput() {
     input.value = '';
 }
 
+function resetAllToDo() {
+    $('#toDoList').children().remove();
+    toDoListArr.forEach((element)=> {
+        insertToDo(element);
+    });
+    checkFooter();
+}
+
 function showCheckAllMark() {
     $checkAllMark.css('opacity','1');
 }
@@ -79,6 +87,17 @@ function checkFooter() {
             updateToDoToLocalStorage();
             checkClearCompletedButton();
             checkAvailabilityToDo();
+        });
+        $('.all-todo').click(function () {
+            resetAllToDo();
+        });
+        $('.active-todo').click(function () {
+            resetAllToDo();
+            $('.checkbox.checked').closest('.list-item').remove();
+        });
+        $('.completed-todo').click(function () {
+            resetAllToDo();
+            $('.checkbox').not('.checked').closest('.list-item').remove();
         });
         updateToDoCounter();
         checkClearCompletedButton();
