@@ -53,6 +53,14 @@ function updateToDoCounter() {
       item.split(":")[1] === 'false').length} items left`);
 }
 
+function checkAvailabilityToDo() {
+    if (localStorage.memory.length === 2) {
+        hideCheckAllMark();
+        $toggleAll.prop('checked', false);
+        $('.footer').remove();
+    }
+}
+
 function checkFooter() {
     if (toDoListArr.length >= 1) {
         $('#toDoList').append('<footer class="footer">');
@@ -61,6 +69,18 @@ function checkFooter() {
         $('.filters').append('<li><a class="all-todo">All</a></li>'+
           '<li><a class="active-todo">Active</a></li>'+
           '<li><a class="completed-todo">Completed</a></li>');
+        $('.clear-completed').click(function(){
+            $('.checkbox.checked').closest('.list-item').remove();
+            toDoListArr = toDoListArr.filter(item => item.split(':')[1] === 'false');
+            updateToDoToLocalStorage();
+            checkClearCompletedButton();
+
+
+            checkAvailabilityToDo();
+
+
+            
+        });
         updateToDoCounter();
         checkClearCompletedButton();
     } else {
@@ -122,9 +142,10 @@ function insertToDo(item) {
         toDoListArr.splice($(this).closest('li').index(),1);
         $(this).closest('.list-item').remove();
         updateToDoToLocalStorage();
-        if (localStorage.memory.length === 2) {
-            hideCheckAllMark();
-        }
+
+
+        checkAvailabilityToDo();
+
         updateFooter();
         updateToDoCounter();
         checkAllCheckboxes();
