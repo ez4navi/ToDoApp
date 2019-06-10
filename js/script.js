@@ -166,13 +166,18 @@ function insertToDo(item) {
 
     let $valueLast = $('.value:last');
 
-    $valueLast.before(function () {
-        return $('<div class="checkbox"></div>').click(function () {
+    $valueLast.before($('<div class="checkbox"></div>').click(function () {
             let i = $(this).closest('li').index();
             if (toDoListArr[i].split(':')[1] === 'false') {
+                if (tab === 'active') {
+                    $(this).closest('li').css('display','none');
+                }
                 toDoListArr[i] = toDoListArr[i].replace('false','true');
                 updateToDoToLocalStorage();
             } else {
+                if (tab === 'completed') {
+                    $(this).closest('li').css('display','none');
+                }
                 toDoListArr[i] = toDoListArr[i].replace('true','false');
                 updateToDoToLocalStorage();
             }
@@ -181,8 +186,8 @@ function insertToDo(item) {
             updateToDoCounter();
             checkAllCheckboxes();
             checkClearCompletedButton();
-        });
-    });
+        })
+    );
     if (item) {
         if (item.split(':')[1] === 'true') {
             $('.checkbox:last').toggleClass('checked');
