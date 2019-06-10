@@ -172,16 +172,20 @@ function insertToDo(item) {
         $(this).children('.edit').focus();
         $(this).children('.edit').val($(this).find('.value').text());
     });
+    $todoLast.keypress(function (e) {
+        if (e.which === 13) {
+            $(this).find('.edit').css('visibility','hidden');
+        }
+    });
     $todoLast.focusout(function () {
+        let i = $(this).closest('li').index();
         $(this).children('.edit').css('visibility','hidden');
         $(this).find('.value').text($(this).children('.edit').val());
+        toDoListArr[i] = $(this).children('.edit').val() +
+          ':' + toDoListArr[i].split(':').pop();
+        updateToDoToLocalStorage();
     });
-    $todoLast.keypress(function (e) {
-       if (e.which === 13) {
-           $(this).find('.edit').css('visibility','hidden');
-           $(this).find('.value').text($(this).find('.edit').val());
-       }
-    });
+
     $valueLast.before($('<div class="checkbox"></div>').click(function () {
             let i = $(this).closest('li').index();
             if (toDoListArr[i].split(':').pop() === 'false') {
