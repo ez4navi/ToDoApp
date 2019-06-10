@@ -189,6 +189,7 @@ function insertToDo(item) {
             updateToDoToLocalStorage();
             checkAvailabilityToDo();
             updateFooter();
+            setTab(tab);
         }
     });
 
