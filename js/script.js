@@ -31,7 +31,7 @@ function updateToDoToLocalStorage() {
 }
 
 function checkAllCheckboxes() {
-    if (toDoListArr.every(item => item.split(':')[1] === 'true')) {
+    if (toDoListArr.every(item => item.split(':').pop() === 'true')) {
         $toggleAll.prop('checked', true);
     } else {
         $toggleAll.prop('checked', false);
@@ -57,11 +57,11 @@ function updateFooter() {
 }
 
 function updateToDoCounter() {
-    if (toDoListArr.filter(item => item.split(":")[1] === 'false').length === 1) {
+    if (toDoListArr.filter(item => item.split(':').pop() === 'false').length === 1) {
         $('.todo-counter').text( `1 item left`);
     } else {
         $('.todo-counter').text(`${toDoListArr.filter(item =>
-          item.split(":")[1] === 'false').length} items left`);
+          item.split(':').pop() === 'false').length} items left`);
     }
 }
 
@@ -95,7 +95,7 @@ function checkFooter() {
           '<li><a class="completed-todo">Completed</a></li>');
         $('.clear-completed').click(function(){
             $('.checkbox.checked').closest('.list-item').remove();
-            toDoListArr = toDoListArr.filter(item => item.split(':')[1] === 'false');
+            toDoListArr = toDoListArr.filter(item => item.split(':').pop() === 'false');
             updateToDoToLocalStorage();
             checkClearCompletedButton();
             checkAvailabilityToDo();
@@ -146,7 +146,7 @@ function setTab(tabLocal) {
 }
 
 function checkClearCompletedButton() {
-    if (toDoListArr.filter(item => item.split(":")[1] === 'true').length >= 1) {
+    if (toDoListArr.filter(item => item.split(':').pop() === 'true').length >= 1) {
         $('.clear-completed').css('visibility','visible');
     } else {
         $('.clear-completed').css('visibility','hidden');
@@ -158,7 +158,7 @@ function insertToDo(item) {
     $('li:last').append('<div class="todo">');
     if (item) {
         $('div:last').append('<div class="checkbox-label">' + '<label class="value">' +
-          item.split(':')[0] + '</label></div>' + '<input type="text" class="edit">'
+          item.split(':').slice(0,-1).join(':') + '</label></div>' + '<input type="text" class="edit">'
           +'<button class="cross"></button>');
     } else {
         $('div:last').append('<div class="checkbox-label">' + '<label class="value">' +
@@ -184,7 +184,7 @@ function insertToDo(item) {
     });
     $valueLast.before($('<div class="checkbox"></div>').click(function () {
             let i = $(this).closest('li').index();
-            if (toDoListArr[i].split(':')[1] === 'false') {
+            if (toDoListArr[i].split(':').pop() === 'false') {
                 if (tab === 'active') {
                     $(this).closest('li').css('display','none');
                 }
@@ -205,7 +205,7 @@ function insertToDo(item) {
         })
     );
     if (item) {
-        if (item.split(':')[1] === 'true') {
+        if (item.split(':').pop() === 'true') {
             $('.checkbox:last').toggleClass('checked');
             $valueLast.toggleClass('checked');
         }
@@ -250,7 +250,6 @@ section.addEventListener('keypress', function (e) {
             updateFooter();
             setTab();
         }
-
         updateToDoCounter();
     }
 });
@@ -271,7 +270,7 @@ $toggleAll.change(function () {
     const $checkbox = $('.checkbox');
     if(this.checked) {
         toDoListArr.forEach((item,idx,array) => {
-           array[idx] = item.split(':')[0]+':true';
+           array[idx] = item.split(':').slice(0,-1).join(':') + ':true';
         });
         $checkbox.addClass('checked');
         $checkbox.next().addClass('checked');
@@ -280,7 +279,7 @@ $toggleAll.change(function () {
         }
     } else {
         toDoListArr.forEach((item,idx,array) => {
-            array[idx] = item.split(':')[0]+':false';
+            array[idx] = item.split(':').slice(0,-1).join(':') +':false';
         });
         if (tab === 'completed') {
             $('.checked').closest('li').css('display','none');
