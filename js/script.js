@@ -183,7 +183,13 @@ function insertToDo(item) {
         $(this).find('.value').text($(this).children('.edit').val());
         toDoListArr[i] = $(this).children('.edit').val() +
           ':' + toDoListArr[i].split(':').pop();
-        updateToDoToLocalStorage();
+        if ($(this).find('.value').text().length === 0) {
+            toDoListArr.splice($(this).closest('li').index(),1);
+            $(this).closest('.list-item').remove();
+            updateToDoToLocalStorage();
+            checkAvailabilityToDo();
+            updateFooter();
+        }
     });
 
     $valueLast.before($('<div class="checkbox"></div>').click(function () {
