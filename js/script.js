@@ -154,7 +154,7 @@ function checkClearCompletedButton() {
 }
 
 function insertToDo(item) {
-    $('#toDoList').append($('<li class="list-item">'));
+    $('#toDoList').append($('<li class="list-item">').fadeIn("normal"));
     $('li:last').append('<div class="todo">');
     if (item) {
         $('div:last').append('<div class="checkbox-label">' + '<label class="value">' +
@@ -239,17 +239,20 @@ function insertToDo(item) {
        $(this).find('.cross').css('visibility','hidden');
     });
     $('.cross:last').click(function () {
-        toDoListArr.splice($(this).closest('li').index(),1);
-        $(this).closest('.list-item').remove();
-        updateToDoToLocalStorage();
-        checkAvailabilityToDo();
-        updateFooter();
-        updateToDoCounter();
-        checkAllCheckboxes();
-        setTab(tab);
-        if (toDoListArr.length === 0) {
-            $toggleAll.prop('checked', false);
-        }
+        $(this).closest('li').slideUp("normal", function () {
+            toDoListArr.splice($(this).closest('li').index(),1);
+            $(this).closest('.list-item').remove();
+            updateToDoToLocalStorage();
+            checkAvailabilityToDo();
+            updateFooter();
+            updateToDoCounter();
+            checkAllCheckboxes();
+            setTab(tab);
+            if (toDoListArr.length === 0) {
+                $toggleAll.prop('checked', false);
+            }
+        });
+
     });
 }
 
@@ -313,7 +316,7 @@ $toggleAll.change(function () {
         $checkbox.removeClass('checked');
         $checkbox.next().removeClass('checked');
         if (tab === 'active') {
-            $('.checkbox').closest('li').css('display','');
+            $checkbox.closest('li').css('display','');
         }
     }
     updateToDoCounter();
