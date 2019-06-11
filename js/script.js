@@ -187,17 +187,17 @@ function insertToDo(item) {
            $(this).find('.edit').css('visibility','hidden');
        }
     });
-    $todoLast.focusout(function () {
+    $('.edit:last').focusout(function () {
         let i = $(this).closest('li').index();
-        $(this).children('.edit').css('visibility','hidden');
-        $(this).find('.value').text($(this).children('.edit').val());
-        toDoListArr[i] = $(this).children('.edit').val() +
+        $(this).css('visibility','hidden');
+        $todoLast.find('.value').text($todoLast.children('.edit').val());
+        toDoListArr[i] = $(this).val() +
           ':' + toDoListArr[i].split(':').pop();
-        $(this).children('.checkbox-label').css('display','');
-        $(this).children('.cross').css('display','');
-        if ($(this).find('.value').text().length === 0) {
-            toDoListArr.splice($(this).closest('li').index(),1);
-            $(this).closest('.list-item').remove();
+        $todoLast.children('.checkbox-label').css('display','');
+        $todoLast.children('.cross').css('display','');
+        if ($todoLast.find('.value').text().length === 0) {
+            toDoListArr.splice($todoLast.closest('li').index(),1);
+            $todoLast.closest('.list-item').remove();
             checkAvailabilityToDo();
             updateFooter();
             setTab(tab);
