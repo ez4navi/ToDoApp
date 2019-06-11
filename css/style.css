@@ -54,7 +54,7 @@ li {
 }
 
 li div {
-  height: 58px;
+  min-height: 58px;
   width: 550px;
   background-color: #fff;
 }
@@ -93,8 +93,6 @@ li div {
 
 .checkbox-label {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
 }
 
 .value {
@@ -108,10 +106,16 @@ li div {
 }
 
 .todo label {
+  align-self: center;
+  padding: 10px 0 10px 0;
   margin-left: 25px;
+  max-width: 450px;
+  overflow-wrap: break-word;
 }
 
 .cross {
+  align-self: flex-start;
+  padding-top: 12px;
   border: 0;
   background: none;
   color: #cc9a9a;

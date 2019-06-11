@@ -165,19 +165,27 @@ function insertToDo(item) {
           input.value + '</label></div>' + '<input type="text" class="edit">' +
           '<button class="cross"></button>');
     }
-    $('.edit').click(function (e) {
-        console.log(e);
-    });
+
     let $valueLast = $('.value:last'), $todoLast = $('.todo:last');
-    $todoLast.dblclick(function () {
-        $(this).children('.edit').css('visibility','visible');
-        $(this).children('.edit').focus();
-        $(this).children('.edit').val($(this).find('.value').text());
+    $todoLast.dblclick(function (e) {
+        if (e.offsetX >= 50) {
+            $(this).children('.edit').css('visibility','visible');
+            $(this).children('.edit').focus();
+            $(this).children('.edit').val($(this).find('.value').text());
+            $(this).children('.checkbox-label').css('display','none');
+            $(this).children('.cross').css('display','none');
+        }
     });
     $todoLast.keypress(function (e) {
         if (e.which === 13) {
             $(this).find('.edit').css('visibility','hidden');
         }
+    });
+    $todoLast.keydown(function (e) {
+       if (e.which === 27) {
+           $(this).find('.edit').val($(this).find('.value').text());
+           $(this).find('.edit').css('visibility','hidden');
+       }
     });
     $todoLast.focusout(function () {
         let i = $(this).closest('li').index();
@@ -185,10 +193,11 @@ function insertToDo(item) {
         $(this).find('.value').text($(this).children('.edit').val());
         toDoListArr[i] = $(this).children('.edit').val() +
           ':' + toDoListArr[i].split(':').pop();
+        $(this).children('.checkbox-label').css('display','');
+        $(this).children('.cross').css('display','');
         if ($(this).find('.value').text().length === 0) {
             toDoListArr.splice($(this).closest('li').index(),1);
             $(this).closest('.list-item').remove();
-            // updateToDoToLocalStorage();
             checkAvailabilityToDo();
             updateFooter();
             setTab(tab);
@@ -289,7 +298,10 @@ $toggleAll.change(function () {
         $checkbox.addClass('checked');
         $checkbox.next().addClass('checked');
         if (tab === 'active') {
-            $('.checked').closest('li').css('display','none');
+            $('.checked').closest('li').css('display', 'none');
+        }
+        if (tab === 'completed') {
+            $('.checked').closest('li').css('display','');
         }
     } else {
         toDoListArr.forEach((item,idx,array) => {
@@ -300,7 +312,9 @@ $toggleAll.change(function () {
         }
         $checkbox.removeClass('checked');
         $checkbox.next().removeClass('checked');
-
+        if (tab === 'active') {
+            $('.checkbox').closest('li').css('display','');
+        }
     }
     updateToDoCounter();
     updateToDoToLocalStorage();
