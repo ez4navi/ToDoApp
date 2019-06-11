@@ -165,7 +165,9 @@ function insertToDo(item) {
           input.value + '</label></div>' + '<input type="text" class="edit">' +
           '<button class="cross"></button>');
     }
-
+    $('.edit').click(function (e) {
+        console.log(e);
+    });
     let $valueLast = $('.value:last'), $todoLast = $('.todo:last');
     $todoLast.dblclick(function () {
         $(this).children('.edit').css('visibility','visible');
@@ -186,11 +188,12 @@ function insertToDo(item) {
         if ($(this).find('.value').text().length === 0) {
             toDoListArr.splice($(this).closest('li').index(),1);
             $(this).closest('.list-item').remove();
-            updateToDoToLocalStorage();
+            // updateToDoToLocalStorage();
             checkAvailabilityToDo();
             updateFooter();
             setTab(tab);
         }
+        updateToDoToLocalStorage();
     });
 
     $valueLast.before($('<div class="checkbox"></div>').click(function () {
